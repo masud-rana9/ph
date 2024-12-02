@@ -6,8 +6,6 @@ import {
   TStudent,
   TUsername,
 } from './student.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
 
 const GuardianSchema = new Schema<TGuardian>({
   fatherName: {
@@ -78,10 +76,13 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: true,
       unique: true,
     },
-    password: {
-      type: String,
+    user: {
+      type: Schema.Types.ObjectId,
       required: true,
+      unique: true,
+      ref: 'User',
     },
+
     name: {
       type: UsernameSchema,
       required: true,
@@ -135,11 +136,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: String,
       required: true,
     },
-    isActive: {
-      type: String,
-      enum: ['active', 'blocked'],
-      default: 'active',
-    },
+
     isDeleted: {
       type: Boolean,
       default: false,
@@ -158,28 +155,6 @@ studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.lastName}`;
 });
 // middlewares
-
-//pree middleware
-
-studentSchema.pre('save', async function (next) {
-  // console.log(this, 'pre middleware called');
-  //Hassing password
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
-
-//post middleware
-
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-
-  next();
-});
 
 //query middleware
 

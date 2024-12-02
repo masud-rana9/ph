@@ -1,8 +1,14 @@
-// export type TUser = {
-//   id: string;
+export type TUser = {
+  id: string;
+  password: string;
+  needspasswordchange: boolean;
+  role: string;
+  satus: 'inprogress' | 'blocked';
+  isDeleted: boolean;
+};
+
+// export type NewUser = {
 //   password: string;
-//   needspasswordchange: boolean;
 //   role: string;
-//   satus: 'inprogress' | 'blocked';
-//   isDeleted: boolean;
+//   id: string;
 // };

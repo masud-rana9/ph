@@ -1,6 +1,5 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { StudentService } from './student.service';
 import catchAsync from '../../../utils/catchAsync';
+import { StudentService } from './student.service';
 //import { Student } from './student.interface';
 
 // const catchAsync = (fn: RequestHandler) => {

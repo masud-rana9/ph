@@ -44,6 +44,7 @@ const StudentValidationSchema = z.object({
     localGuardian: LocalGuardianValidationSchema,
     profieImg: z.string(),
     isActive: z.enum(['active', 'blocked']).default('active'),
+    academicSemester: z.string(),
     isDeleted: z.boolean().default(false),
   }),
 });

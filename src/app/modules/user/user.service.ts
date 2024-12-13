@@ -1,10 +1,12 @@
 import config from '../../config';
+import { AcademicSemester } from '../academicSemeter/academicSemester.model';
 import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
+import { generateId } from './user.utils';
 
-const createStudentIntoDB = async (password: string, studentData: TStudent) => {
+const createStudentIntoDB = async (password: string, payload: TStudent) => {
   //   if (await Student.isUserExists(studentData.id)) {
   //     throw new Error('user already exists');
   //   }
@@ -23,7 +25,12 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   //set student role
   userData.role = 'student';
   // manually set id
-  userData.id = '2030100001';
+
+  const addmissionSemester = await AcademicSemester.findById(
+    payload.admissionSemester,
+  );
+
+  userData.id = generateId(addmissionSemester);
 
   //create user
   const NewUser = await User.create(userData); //builtin static methods
@@ -31,9 +38,9 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   //create a student
 
   if (Object.keys(NewUser).length) {
-    studentData.id = NewUser.id;
-    studentData.user = NewUser._id;
-    const newStudent = await Student.create(studentData);
+    payload.id = NewUser.id;
+    payload.user = NewUser._id;
+    const newStudent = await Student.create(payload);
     return newStudent;
   }
 
